@@ -15,9 +15,9 @@ namespace Infrastructure.Persistence.Configurations
             builder.HasIndex(m => m.Code).IsUnique();
             builder.Property(m => m.CreatedAt).IsRequired();
 
-            builder.HasOne(m => m.Creator)
+            builder.HasOne(m => m.Owner)
                 .WithMany(p => p.MastersCreated)
-                .HasForeignKey(m => m.CreatorId)
+                .HasForeignKey(m => m.OwnerId)
                 .OnDelete(DeleteBehavior.Restrict);
         }
     }

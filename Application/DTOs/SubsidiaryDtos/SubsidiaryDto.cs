@@ -1,4 +1,5 @@
-﻿using Domain.Common;
+﻿using Application.DTOs.MasterDtos;
+using Application.DTOs.PersonDtos;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -7,17 +8,18 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Domain.Entities
+namespace Application.DTOs.SubsidiaryDtos
 {
-    public class Subsidiary : BaseEntity
+    public class SubsidiaryDto
     {
+        public int Id { get; set; }
         [Required]
         [MaxLength(200)]
-        public string? Title { get; set; } 
+        public string? Title { get; set; }
 
         [Required]
         [MaxLength(50)]
-        public string Code { get; set; } 
+        public string Code { get; set; }
 
         public long DebitAmount { get; set; } = 0;//rial
 
@@ -27,20 +29,17 @@ namespace Domain.Entities
         public bool IsLastLevel { get; set; } = true;
 
         [Required]
-        [ForeignKey(nameof(Person))]
         public int OwnerId { get; set; }
-        public Person Owner { get; set; } 
+        public GetPersonDto Owner { get; set; }
 
-        [ForeignKey(nameof(Master))]
         [Required]
         public int MasterId { get; set; }
-        public Master Master { get; set; } 
+        public GetMasterDto Master { get; set; }
 
-        [ForeignKey(nameof(Subsidiary))]
         public int? ParentSubsidiaryId { get; set; }
-        public Subsidiary? ParentSubsidiary { get; set; }
+        public GetSubsidiaryDto? ParentSubsidiary { get; set; }
 
-        public ICollection<Subsidiary> ChildSubsidiaries { get; set; } = new List<Subsidiary>();
+        public ICollection<GetSubsidiaryDto> ChildSubsidiaries { get; set; } = new List<GetSubsidiaryDto>();
 
 
         [Required]
@@ -49,5 +48,6 @@ namespace Domain.Entities
 
         [Required]
         public bool IsDeleted { get; set; } = false;
+        public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
     }
 }

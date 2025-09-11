@@ -1,4 +1,4 @@
-﻿using Domain.Common;
+﻿using Application.DTOs.PersonDtos;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -7,9 +7,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Domain.Entities
+namespace Application.DTOs.MasterDtos
 {
-    public class Master: BaseEntity
+    public class UpdateMasterDto
     {
         [Required]
         [MaxLength(200)]
@@ -17,15 +17,10 @@ namespace Domain.Entities
 
         [Required]
         [MaxLength(50)]
-        public string Code { get; set; } 
+        public string Code { get; set; }
 
-        [ForeignKey(nameof(Person))]
         [Required]
         public int OwnerId { get; set; }
 
-        public Person Owner { get; set; } 
-
-        public ICollection<Subsidiary> Subsidiaries { get; set; } = new List<Subsidiary>();
     }
-
 }

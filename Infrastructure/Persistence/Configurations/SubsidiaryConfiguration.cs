@@ -19,9 +19,9 @@ namespace Infrastructure.Persistence.Configurations
             builder.Property(s => s.IsLastLevel).IsRequired();
             builder.Property(s => s.IsDeleted).IsRequired().HasDefaultValue(false);
             builder.Property(s => s.CreatedAt).IsRequired();
-            builder.HasOne(s => s.Creator)
+            builder.HasOne(s => s.Owner)
                 .WithMany(p => p.SubsidiariesCreated)
-                .HasForeignKey(s => s.CreatorId)
+                .HasForeignKey(s => s.OwnerId)
                 .OnDelete(DeleteBehavior.Restrict);
 
             builder.HasOne(s => s.Master)
