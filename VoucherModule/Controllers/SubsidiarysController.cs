@@ -68,8 +68,10 @@ namespace Api.Controllers
             var worksheet = package.Workbook.Worksheets.Add("Subsidiarys");
             //TODO:add debit creadit after addeing subs
             worksheet.Cells[1, 1].Value = "Title";
-            worksheet.Cells[1, 2].Value = "Last Name";
-            worksheet.Cells[1, 3].Value = "National Id";
+            worksheet.Cells[1, 2].Value = "Code";
+            worksheet.Cells[1, 3].Value = "OwnerId";
+            worksheet.Cells[1, 4].Value = "DebitAmount";
+            worksheet.Cells[1, 5].Value = "CreditAmount";
 
             int row = 2;
             foreach (var p in persons.Data)
@@ -77,6 +79,8 @@ namespace Api.Controllers
                 worksheet.Cells[row, 1].Value = p.Title;
                 worksheet.Cells[row, 2].Value = p.Code;
                 worksheet.Cells[row, 3].Value = p.OwnerId;
+                worksheet.Cells[row, 3].Value = p.DebitAmount;
+                worksheet.Cells[row, 3].Value = p.CreditAmount;
                 row++;
             }
 

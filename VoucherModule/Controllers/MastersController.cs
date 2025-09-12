@@ -68,8 +68,8 @@ namespace Api.Controllers
             var worksheet = package.Workbook.Worksheets.Add("Masters");
             //TODO:add debit creadit after addeing subs
             worksheet.Cells[1, 1].Value = "Title";
-            worksheet.Cells[1, 2].Value = "Last Name";
-            worksheet.Cells[1, 3].Value = "National Id";
+            worksheet.Cells[1, 2].Value = "Code";
+            worksheet.Cells[1, 3].Value = "OwnerId";
 
             int row = 2;
             foreach (var p in persons.Data)
