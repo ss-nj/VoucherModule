@@ -6,11 +6,11 @@ using Domain.Entities;
 using System;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 
-namespace Api.Configurations
+namespace Application.MappingProfiles
 {
     public class MapperConfig : Profile
     {
-        MapperConfig()
+        public MapperConfig()
         {
             CreateMap<Person, PersonDto>().ReverseMap();
             CreateMap<Person, GetPersonDto>().ReverseMap();

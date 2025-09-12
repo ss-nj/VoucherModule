@@ -1,9 +1,11 @@
 ﻿using Application.Common.Models;
 using Application.Exceptions;
+using Application.Interfaces;
 using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using Domain.Common;
 using Infrastructure.Persistence;
+using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -83,11 +85,24 @@ namespace Infrastructure.Repositories.Base
 
 
         public async Task<TResult> AddAsync<TSource, TResult>(TSource source)
-        {
+        {//TODO:exception midlware
             var entity = _mapper.Map<T>(source);
-
-            await _context.AddAsync(entity);
-            await _context.SaveChangesAsync();
+            try
+            {
+                await _context.AddAsync(entity);
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateException ex) when (ex.InnerException is SqlException sqlEx &&
+                                      (sqlEx.Number == 2601 || sqlEx.Number == 2627))
+            {
+                // Unique constraint violation at SQL Server
+                throw new BadRequestException("NationalId or PhoneNumber already exists.");
+            }
+            catch (Exception ex)
+            {
+                throw new BadRequestException(ex.Message);
+            }
+            
 
             return _mapper.Map<TResult>(entity);
         }

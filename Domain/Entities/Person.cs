@@ -24,7 +24,6 @@ namespace Domain.Entities
         public string NationalId { get; set; } 
 
         [Required]
-        [Phone]
         [MaxLength(20)]
         public string PhoneNumber { get; set; } 
   

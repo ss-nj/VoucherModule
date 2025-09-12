@@ -7,7 +7,7 @@ using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Infrastructure.Repositories.Base
+namespace Application.Interfaces
 {
     // Infrastructure/Repositories/IGenericRepository.cs
     public interface IGenericRepository<T> where T : BaseEntity
@@ -19,7 +19,7 @@ namespace Infrastructure.Repositories.Base
         Task DeleteAsync(int id);
         Task UpdateAsync<TSource>(int id, TSource source);
         Task<bool> Exists(int id);
-        Task<PagedResult<T>> GetAllAsync(QueryParameters parameters, Expression<Func<T, bool>>? filter = null);
+        Task<PagedResult<TResult>> GetAllAsync<TResult>(QueryParameters parameters, Expression<Func<T, bool>>? filter = null);
     }
 
 }
