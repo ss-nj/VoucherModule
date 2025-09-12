@@ -2,6 +2,7 @@
 using Application.DTOs.PersonDtos;
 using Application.Interfaces;
 using Application.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using OfficeOpenXml;
 using OfficeOpenXml.Style;
@@ -10,6 +11,7 @@ namespace Api.Controllers
 {//TODO:add versioning and rate limit
     [ApiController]
     [Route("api/[controller]")]
+    [Authorize]
     public class PersonsController : ControllerBase
     {
         private readonly IPersonService _personService;
