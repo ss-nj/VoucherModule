@@ -21,6 +21,7 @@ namespace Infrastructure
             services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
             services.AddScoped<IPersonRepository, PersonRepository>();
             services.AddScoped<IMasterRepository, MasterRepository>();
+            services.AddScoped<ISubsidiaryRepository, SubsidiaryRepository>();
 
 
             return services;
