@@ -15,6 +15,7 @@ namespace Application
 
             // register application services
             services.AddScoped<IPersonService, PersonService>();
+            services.AddScoped<IMasterService, MasterService>();
       
 
             return services;

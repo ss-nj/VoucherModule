@@ -20,6 +20,7 @@ namespace Infrastructure
             // register repositories
             services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
             services.AddScoped<IPersonRepository, PersonRepository>();
+            services.AddScoped<IMasterRepository, MasterRepository>();
 
 
             return services;
