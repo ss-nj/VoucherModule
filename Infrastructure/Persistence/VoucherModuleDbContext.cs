@@ -35,35 +35,43 @@ namespace Infrastructure.Persistence
         {
             var now = DateTime.UtcNow;
 
+
             foreach (var entry in ChangeTracker.Entries<BaseEntity>())
             {
                 if (entry.State == EntityState.Added)
                     entry.Entity.CreatedAt = now;
             }
 
-            // calc path for added/modified Subsidiaries
+
+
+
             foreach (var entry in ChangeTracker.Entries<Subsidiary>()
                          .Where(e => e.State == EntityState.Added || e.State == EntityState.Modified))
             {
                 var s = entry.Entity;
-                var parentPath = await GetParentPathAsync(s, cancellationToken);
 
-                // If new 
-                if (entry.State == EntityState.Added && s.Id == 0)
+                if (s.ParentSubsidiaryId.HasValue)
                 {
-                    entry.Property(x => x.ParentPath).CurrentValue = parentPath;
+
+                    var parent = s.ParentSubsidiary ?? await Subsidiaries
+                        .AsNoTracking()
+                        .FirstOrDefaultAsync(x => x.Id == s.ParentSubsidiaryId, cancellationToken);
+
+                    var parentPath = parent?.ParentPath ?? "-";
+
+                    entry.Property(x => x.ParentPath).CurrentValue = $"{parentPath}{s.ParentSubsidiaryId}-";
                 }
                 else
                 {
-                    s.ParentPath = $"{parentPath}{s.Id}-";
+                    entry.Property(x => x.ParentPath).CurrentValue = "-";
                 }
             }
 
             var result = await base.SaveChangesAsync(cancellationToken);
 
-            // ParentPath for new Subsidiaries
+
             var newSubsidiaries = ChangeTracker.Entries<Subsidiary>()
-                .Where(e => e.State == EntityState.Added && e.Entity.Id > 0)
+                .Where(e => e.State == EntityState.Unchanged && e.Entity.Id > 0 && string.IsNullOrEmpty(e.Entity.ParentPath))
                 .ToList();
 
             if (newSubsidiaries.Any())
@@ -73,6 +81,7 @@ namespace Infrastructure.Persistence
                     var s = entry.Entity;
                     var parentPath = await GetParentPathAsync(s, cancellationToken);
                     s.ParentPath = $"{parentPath}{s.Id}-";
+
 
                     Entry(s).Property(x => x.ParentPath).IsModified = true;
                 }
