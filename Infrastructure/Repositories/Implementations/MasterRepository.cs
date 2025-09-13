@@ -35,5 +35,35 @@ namespace Infrastructure.Repositories.Implementations
 
             return Master;
         }
+
+        public async Task<List<object>> GetReportAsync(int id)
+        {
+            var masters = await _context.Masters
+                .Include(m => m.Subsidiaries)
+                .Where(m => m.Id == id)
+                .ToListAsync();
+
+            var report = masters.Select(m => new
+            {
+                MasterId = m.Id,
+                MasterTitle = m.Title,
+                TotalDebit = m.Subsidiaries.Where(s => !s.IsDeleted)
+                                           .Sum(s => s.DebitAmount),
+                TotalCredit = m.Subsidiaries.Where(s => !s.IsDeleted)
+                                            .Sum(s => s.CreditAmount),
+                Subsidiaries = m.Subsidiaries
+                    .Where(s => !s.IsDeleted)
+                    .Select(s => new
+                    {
+                        s.Id,
+                        s.Title,
+                        s.DebitAmount,
+                        s.CreditAmount
+                    })
+                    .ToList()
+            }).ToList();
+
+            return report.Cast<object>().ToList();
+        }
     }
 }

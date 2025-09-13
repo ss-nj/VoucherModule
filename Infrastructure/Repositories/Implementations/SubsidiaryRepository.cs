@@ -6,11 +6,11 @@ using AutoMapper.QueryableExtensions;
 using Domain.Entities;
 using Infrastructure.Persistence;
 using Infrastructure.Repositories.Base;
-using Microsoft.EntityFrameworkCore;  
+using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.Repositories.Implementations
 {
-    public class SubsidiaryRepository :GenericRepository<Subsidiary>, ISubsidiaryRepository
+    public class SubsidiaryRepository : GenericRepository<Subsidiary>, ISubsidiaryRepository
     {
         private readonly VoucherModuleDbContext _context;
         private readonly IMapper _mapper;
@@ -37,5 +37,44 @@ namespace Infrastructure.Repositories.Implementations
 
             return Subsidiary;
         }
+
+
+        public async Task<object> GetReportAsync(int id)
+        {
+            var parent = await _context.Subsidiaries
+                .AsNoTracking()
+                .FirstOrDefaultAsync(s => s.Id == id);
+
+            if (parent == null)
+            {
+                throw new NotFoundException(typeof(Subsidiary).Name, id);
+            }
+
+            var children = await _context.Subsidiaries
+                .AsNoTracking()
+                .Where(s => !s.IsDeleted && s.ParentPath.Contains(id.ToString()) && s.Id != id)
+                .ToListAsync();
+
+            var totalDebit = parent.DebitAmount + children.Sum(s => s.DebitAmount);
+            var totalCredit = parent.CreditAmount + children.Sum(s => s.CreditAmount);
+
+            var report = new
+            {
+                SubsidiaryId = parent.Id,
+                SubsidiaryTitle = parent.Title,
+                TotalDebit = totalDebit,
+                TotalCredit = totalCredit,
+                Subsidiaries = children.Select(s => new
+                {
+                    s.Id,
+                    s.Title,
+                    s.DebitAmount,
+                    s.CreditAmount
+                }).ToList()
+            };
+
+            return report;
+        }
+
     }
 }

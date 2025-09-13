@@ -30,6 +30,11 @@ namespace Application.Services
             return await _repository.GetDetailsById(id);
         }
 
+        public async Task<object> GetReportAsync(int id)
+        {
+            return await _repository.GetReportAsync(id);
+        }
+
         public async Task<MasterDto> CreateAsync(CreateMasterDto dto)
         {
             return await _repository.AddAsync<CreateMasterDto, MasterDto>(dto);
@@ -44,5 +49,7 @@ namespace Application.Services
         {
             await _repository.DeleteAsync(id);
         }
+
+
     }
 }

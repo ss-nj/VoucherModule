@@ -12,6 +12,7 @@ namespace Application.Interfaces
         Task<SubsidiaryDto> CreateAsync(CreateSubsidiaryDto dto);
         Task UpdateAsync(int id, UpdateSubsidiaryDto dto);
         Task DeleteAsync(int id);
+        Task<object> GetReportAsync(int id);
     }
 
 }

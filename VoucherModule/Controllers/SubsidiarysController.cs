@@ -93,8 +93,13 @@ namespace Api.Controllers
                         "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
                         fileName);
         }
+        [HttpGet("hierarchy/{id:int}")]
+        public async Task<IActionResult> GetHierarchyReport(int id)
+        {
+            var data = await _personService.GetReportAsync(id);
+            return Ok(data);
+        }
 
-        
     }
 }
 

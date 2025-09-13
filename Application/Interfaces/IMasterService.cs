@@ -12,6 +12,7 @@ namespace Application.Interfaces
         Task<MasterDto> CreateAsync(CreateMasterDto dto);
         Task UpdateAsync(int id, UpdateMasterDto dto);
         Task DeleteAsync(int id);
+        Task<object> GetReportAsync(int id);
     }
 
 }

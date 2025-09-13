@@ -30,6 +30,11 @@ namespace Application.Services
             return await _repository.GetDetailsById(id);
         }
 
+        public async Task<object> GetReportAsync(int id)
+        {
+            return await _repository.GetReportAsync(id);
+        }
+
         public async Task<SubsidiaryDto> CreateAsync(CreateSubsidiaryDto dto)
         {
             return await _repository.AddAsync<CreateSubsidiaryDto, SubsidiaryDto>(dto);
